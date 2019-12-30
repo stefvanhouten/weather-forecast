@@ -28,7 +28,7 @@
     </div>
   </header>
   <main>
-    {% if data|length > 1%}
+    {% if data != None %}
     <section class="cards" id="card-holder">
       <div class="card">
         <div class="card-title">
@@ -85,6 +85,11 @@
     </section>
     {% endfor %}
     {% endif %}
+
+    {% else %}
+    <section>
+      <h2>Something went wrong</h2>
+    </section>
     {% endif %}
   </main>
 </body>

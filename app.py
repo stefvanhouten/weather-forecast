@@ -11,14 +11,19 @@ app.config['SECRET_KEY'] = 'secret'
 def index():
   response = requests.get(
       'https://api.darksky.net/forecast/439f4d9d27bbb7f513361d2e54644e83/53.20139,5.80859'
-  ).json()
-  if "currently" in response:
-    response['currently']['time'] = datetime.utcfromtimestamp(
-        response['currently']['time'])
-  if "alerts" in response:
-    for alert in response['alerts']:
-      alert['time'] = datetime.utcfromtimestamp(alert['time'])
-      alert['expires'] = datetime.utcfromtimestamp(alert['expires'])
+  )
+
+  if response.status_code == 200:
+    response = response.json()
+    if "currently" in response:
+      response['currently']['time'] = datetime.utcfromtimestamp(
+          response['currently']['time'])
+    if "alerts" in response:
+      for alert in response['alerts']:
+        alert['time'] = datetime.utcfromtimestamp(alert['time'])
+        alert['expires'] = datetime.utcfromtimestamp(alert['expires'])
+  else:
+    response = None
 
   return render_template('index.html', data=response)
 
