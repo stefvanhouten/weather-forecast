@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link href="//css.underdark.nl/0.2/base.css" rel="stylesheet" />
+  <link href="//css.underdark.nl/0.2/layout.css" rel="stylesheet" />
+  <link href="//css.underdark.nl/0.2/module.css" rel="stylesheet" />
+  <link href="//css.underdark.nl/0.2/theme.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <header id="nav">
+    <div>
+      <div class="logo">
+        <a href="/">Forecast</a>
+        <p>Weather forecast of Leeuwarden.</p>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    {% if data|length > 1%}
+    <section class="cards" id="card-holder">
+      <div class="card">
+        <div class="card-title">
+          <h2>Leeuwarden</h2>
+          <h4>{{data.currently.time}}</h4>
+        </div>
+        <div class="card-content">
+          <b>Timezone</b>
+          <p>
+            {{data.timezone}}
+          </p>
+          <b>Summary</b>
+          <p>
+            {{data.currently.summary}}
+          </p>
+          <b>Temperature</b>
+          <p>
+            {{((data.currently.temperature - 32)  * 5 / 9)|round(1)}}°
+          </p>
+          <b>Apparant temperature</b>
+          <p>
+            {{((data.currently.apparentTemperature - 32)  * 5 / 9)|round(1)}}°
+          </p>
+          <b>Windspeed</b>
+          <p>
+            {{data.currently.windSpeed}} km/h
+          </p>
+          <b>Windgust</b>
+          <p>
+            {{data.currently.windGust}} km/h
+          </p>
+        </div>
+      </div>
+    </section>
+    {% if data.alerts %}
+    <section>
+      <h1>Alerts</h1>
+    </section>
+    {% for alert in data.alerts %}
+    <section class="cards" id="card-holder">
+      <div class="card">
+        <div class="card-title">
+          {{ alert.title }}
+          <h5>
+            {{alert.time}} - {{alert.expires}}
+          </h5>
+        </div>
+        <div class="card-content">
+          <p>
+            {{alert.description}}
+          </p>
+        </div>
+      </div>
+    </section>
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+  </main>
+</body>
+
+</html>
